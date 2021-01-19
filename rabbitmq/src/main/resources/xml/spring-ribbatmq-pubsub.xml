@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+  https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+  http://www.springframework.org/schema/beans
+  https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--配置连接工厂-->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1"  password="top.mengchao.www" username="mengchaob" virtual-host="mengchaobhost"/>
+    <!--配置实例-->
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory"></rabbit:template>
+    <!--管理工具-->
+    <rabbit:admin connection-factory="connectionFactory" id="admin"/>
+    <!--配置队列-->
+    <!--durable 是否序列化
+    auto-declare 如果不存在是否自动创建相应队列
+    -->
+    <rabbit:queue name="queue1" auto-declare="true" durable="true" id="queue1"/>
+    <!--配置广播类型交换机
+    auto-declare 如果不存在是否自动创建相应交换机
+    绑定队咧queque1，也可以不绑定
+    -->
+    <rabbit:fanout-exchange name="my_fanout_exchange" auto-declare="true" id="my_fanout_exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="queue1"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:fanout-exchange>
+
+</beans>

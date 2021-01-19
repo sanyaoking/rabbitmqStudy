@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+  https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+  http://www.springframework.org/schema/beans
+  https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--消息发送者配置-->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1" password="top.mengchao.www" username="mengchaob" virtual-host="mengchaobhost"/>
+    <!--也可以绑定 routing-key="direct.key3"-->
+    <rabbit:template id="amqpTemplate"  connection-factory="connectionFactory" exchange="direct-exchange"/>
+    <rabbit:admin connection-factory="connectionFactory" id="admin"/>
+    <rabbit:queue name="dead_queue1"/>
+    <rabbit:queue name="dead_queue2"/>
+    <rabbit:queue name="reply_queue"/>
+    <rabbit:direct-exchange name="direct-exchange" id="direct-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="dead_queue1" key="dead.key1"></rabbit:binding>
+            <rabbit:binding queue="dead_queue2" key="dead.key2"></rabbit:binding>
+            <rabbit:binding queue="reply_queue" key="reply.key1"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+</beans>

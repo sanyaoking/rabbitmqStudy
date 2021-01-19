@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+  https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+  http://www.springframework.org/schema/beans
+  https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--消息发送者配置-->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1" password="top.mengchao.www" username="mengchaob" virtual-host="mengchaobhost"/>
+    <rabbit:template id="rabbitTemplate"  connection-factory="connectionFactory" exchange="dead-exchange" routing-key="dead.key1"/>
+    <rabbit:admin connection-factory="connectionFactory" id="admin"/>
+    <!--一定注意现有队列是否已经设置了x-message-ttl，如果已经设置了，那么必须保证两个x-message-ttl相同-->
+    <rabbit:queue-arguments id="dead_arguments">
+        <entry key="x-dead-letter-exchange" value="dead-exchange"/>
+        <entry key="x-dead-letter-routing-key" value="dead.key2"/>
+    </rabbit:queue-arguments>
+    <rabbit:queue name="dead_queue1" auto-declare="true" queue-arguments="dead_arguments"></rabbit:queue>
+    <rabbit:queue name="dead_queue2" auto-declare="true"></rabbit:queue>
+    <rabbit:direct-exchange name="dead-exchange" id="dead-exchange">
+        <rabbit:bindings>
+            <rabbit:binding queue="dead_queue1" key="dead.key1"></rabbit:binding>
+            <rabbit:binding queue="dead_queue2" key="dead.key2"></rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:direct-exchange>
+</beans>

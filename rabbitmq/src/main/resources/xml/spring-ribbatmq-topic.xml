@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:rabbit="http://www.springframework.org/schema/rabbit"
+       xsi:schemaLocation="http://www.springframework.org/schema/rabbit
+  https://www.springframework.org/schema/rabbit/spring-rabbit.xsd
+  http://www.springframework.org/schema/beans
+  https://www.springframework.org/schema/beans/spring-beans.xsd">
+    <!--消息发送者配置-->
+    <rabbit:connection-factory id="connectionFactory" host="127.0.0.1" password="top.mengchao.www" username="mengchaob" virtual-host="mengchaobhost"/>
+    <rabbit:template id="amqpTemplate" connection-factory="connectionFactory" exchange="topic-exchange"/>
+    <rabbit:admin connection-factory="connectionFactory" id="admin"/>
+    <rabbit:queue name="topic_queue1"/>
+    <rabbit:queue name="topic_queue2"/>
+    <rabbit:topic-exchange name="topic-exchange" id="topic-exchange">
+        <rabbit:bindings>
+            <rabbit:binding pattern="topic1.*" queue="topic_queue1">
+            </rabbit:binding>
+            <rabbit:binding pattern="topic2.#" queue="topic_queue2">
+            </rabbit:binding>
+        </rabbit:bindings>
+    </rabbit:topic-exchange>
+</beans>

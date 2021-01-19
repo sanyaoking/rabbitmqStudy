@@ -1,0 +1,4 @@
+1.reply-to，reply-address做什么用的
+2.receiveAndreply 如何调整成为container监听的形式0
+3.header转发的意义及使用方法
+4.PooledChannelConnectionFactory、ThreadChannelConnectionFactory和CachingConnectionFactory的区别
